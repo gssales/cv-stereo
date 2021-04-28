@@ -1,0 +1,4 @@
+datasets/*
+!datasets/cones
+!datasets/teddy
+__pycache__
