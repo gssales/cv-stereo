@@ -1,4 +1,7 @@
 datasets/*
 !datasets/cones
 !datasets/teddy
+results
 __pycache__
+
+disp.png
