@@ -4,4 +4,4 @@ datasets/*
 results
 __pycache__
 
-disp.png
+disp*
