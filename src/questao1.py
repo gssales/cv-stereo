@@ -36,13 +36,13 @@ if __name__ == '__main__':
   cv2.imshow("Left Image", imgL)
   cv2.imshow("Right Image", imgR)
 
-  disp = agg(disp, 7, median)
+  # disp = agg(disp, 3, median)
 
   cv2.imshow(f"Disparity Map ({args.output})", np.uint8(disp))
   
   cv2.waitKey()
   cv2.destroyAllWindows()
   
-  cv2.imwrite(args.output, np.uint8(disp))
+  cv2.imwrite(f'{directory}/{args.output}', np.uint8(disp))
   print("Resultado Salvo")
 

@@ -3,7 +3,7 @@ import os
 import argparse
 import numpy as np
 import cv2
-from stereo import stereo, functions
+from stereo import stereo, functions, agg, median
 from cost_fn import functions as cost_fns
 
 if __name__ == '__main__':
@@ -13,7 +13,7 @@ if __name__ == '__main__':
   parser.add_argument('-m', '--max_shift', metavar='max_shift', type=int, default=255, help='Máximo de deslocamento para procura pela disparidade')
   parser.add_argument('-c', '--cost_fn', metavar='cost_fn', type=str, default='ssd', help='Função de custo para encontrar a disparidade')
   parser.add_argument('-b', '--box_size', metavar='box_size', type=int, default=3, help='Tamanho do cubo de custos na função de agregação')
-  parser.add_argument('-a', '--agg_fn', metavar='agg_fn', type=str, default='avg', help='Função de filtro da agregação')
+  parser.add_argument('-a', '--agg_fn', metavar='agg_fn', type=str, default='median', help='Função de filtro da agregação')
   parser.add_argument('-o', '--output', metavar='output', type=str, default='disp.png', help='nome do arquivo de saída')
   args = parser.parse_args()
 
@@ -36,6 +36,7 @@ if __name__ == '__main__':
   imgR = cv2.imread(f'{directory}/im1.png')
 
   disp = stereo(imgL, imgR, cost_fn, patch_size, max_shift, box_size, agg_fn)
+  # disp = agg(disp, 7, median)
   cv2.imshow("Left Image", imgL)
   cv2.imshow("Right Image", imgR)
 
@@ -44,5 +45,5 @@ if __name__ == '__main__':
   cv2.waitKey()
   cv2.destroyAllWindows()
   
-  cv2.imwrite(args.output, np.uint8(disp))
+  cv2.imwrite(f'{directory}/{args.output}', np.uint8(disp))
   print("Resultado Salvo")

@@ -50,21 +50,23 @@ def stereo(imgL, imgR, cost_fn, patch_size=5, max_shift=80, box_size=0, agg_fn=l
 def match_feature(patch, section, cost_fn, max_shift, box_size, agg_fn):
   cost_cube = compute_cost_cube(patch, section, cost_fn) # patch_size
   # print(cost_cube[:4,:4])
-  _, sx = cost_cube.shape
-  min_d = max_shift
-  min_cost = 1e15
-  for d in range(sx-box_size//2-1, box_size//2-1, -1):
+  sy, sx = cost_cube.shape
+  min_d = 0
+  min_cost = 1e5
+  if sy == 0:
+    return 0
+  for d in range(box_size//2, sx-box_size//2):
     cost = 1e15
     if box_size > 0:
       x0 = d-box_size//2
       x1 = d+box_size//2+1
       cost = agg_fn(cost_cube[:, x0:x1])
     else:
-      cost = cost_cube[d]
+      cost = cost_cube[0,d]
     # print(cost, min_cost, box_size//2, sx-box_size//2)
     if cost < min_cost:
       min_cost = cost
-      min_d = d
+      min_d = max_shift-d-box_size//2
   return min_d
 
 def compute_cost_cube(patch, section, cost_fn):
